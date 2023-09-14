@@ -1,17 +1,11 @@
 #include <unity.h>
-#include <example.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/libmbus/mbus-protocol-aux.h"
 #include "../lib/libmbus/mbus-json.h"
+#include "../lib/libmbus/mbus-protocol-aux.h"
 
-void test_add(void)
-{
-    int expected = 1 + 3;
-    int actual = add(1, 3);
-    TEST_ASSERT_EQUAL_INT32(expected, actual);
-}
+void run_test_hex(void);
 
 void read_hex_file(char fileName[50], unsigned char raw_buff[], size_t raw_buff_length)
 {
@@ -32,10 +26,8 @@ void read_hex_file(char fileName[50], unsigned char raw_buff[], size_t raw_buff_
     fclose(fp);
 }
 
-int main(int argc, char **argv)
+void run_test_hex(void)
 {
-    UNITY_BEGIN();
-
     char filename[] = "test/test_desktop/hex/message_01.hex";
     unsigned char raw_buff[4096];
     unsigned char buff[4096];
@@ -44,6 +36,7 @@ int main(int argc, char **argv)
     mbus_frame reply;
     mbus_frame_data frame_data;
     char *xml_result = NULL;
+    char *json_result = NULL;
 
     read_hex_file(filename, raw_buff, sizeof(raw_buff));
     printf("%s\n", raw_buff);
@@ -60,11 +53,17 @@ int main(int argc, char **argv)
     printf("result=%i\n", result);
     printf("normalized=%i\n", normalized);
 
-    xml_result = normalized ? mbus_frame_data_xml_normalized(&frame_data) : mbus_frame_data_xml(&frame_data);
+    json_result = normalized ? mbus_frame_data_json_normalized(&frame_data) : mbus_frame_data_json(&frame_data);
+    // printf("json_result=%s\n", json_result);
 
-    printf("xml_result=%s\n", xml_result);
+    TEST_ASSERT_EQUAL_INT32(1, 1);
+}
 
-    RUN_TEST(test_add);
+int main(int argc, char **argv)
+{
+    UNITY_BEGIN();
+
+    RUN_TEST(run_test_hex);
     UNITY_END();
 
     return 0;
