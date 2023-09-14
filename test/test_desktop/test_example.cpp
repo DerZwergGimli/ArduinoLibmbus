@@ -54,7 +54,11 @@ void run_test_hex(void)
     printf("normalized=%i\n", normalized);
 
     json_result = normalized ? mbus_frame_data_json_normalized(&frame_data) : mbus_frame_data_json(&frame_data);
-    // printf("json_result=%s\n", json_result);
+    printf("json_result=%s\n", json_result);
+    printf("strlen=%i\n", strlen(json_result));
+
+    free(json_result);
+    mbus_data_record_free(frame_data.data_var.record);
 
     TEST_ASSERT_EQUAL_INT32(1, 1);
 }
